@@ -1,0 +1,14 @@
+Exercitiul 1.
+Deoarece avem o ordine de scrieri și citiri care respectă ordinea cronologică a firelor de execuție, putem spune că aceasta este o secvență linearizabilă. Ordinea operațiilor în această secvență este următoarea:
+1.	B scrie 1 în r: B -> r.write(1)
+2.	A citește valoarea 1: A -> r.read(): 1
+3.	A citește din nou valoarea 1: A -> r.read(): 1
+4.	C scrie 2 în r: C -> r.write(2)
+5.	B citește valoarea 2: B -> r.read(): 2
+6.	B citește din nou valoarea 2: B -> r.read(): 2
+7.	C scrie 1 în r: C -> r.write(1)
+8.	A citește valoarea 1: A -> r.read(): 1
+Această ordine a operațiilor respectă proprietatea de linearizabilitate, deoarece:
+•	Fiecare operație de citire reflectă valoarea actuală a lui r la momentul respectiv, așa cum a fost stabilită de scrierile anterioare.
+•	Schimbările asupra variabilei r sunt vizibile în mod corespunzător între diferitele operații de citire și scriere.
+Astfel, dacă secvența este linearizabilă, ea respectă automat și consistența secvențială, deoarece ambele proprietăți garantează o ordine globală a operațiilor, dar linearizabilitatea impune un criteriu mai strict ,deci putem spune ca este si consistent secventiala.

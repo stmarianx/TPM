@@ -1,5 +1,5 @@
 # TPM
-Exercitiul 1.
+# Exercitiul 1.
 
 Deoarece avem o ordine de scrieri și citiri care respectă ordinea cronologică a firelor de execuție, putem spune că aceasta este o secvență linearizabilă. Ordinea operațiilor în această secvență este următoarea:
 1.	B scrie 1 în r: B -> r.write(1)
@@ -10,7 +10,7 @@ Deoarece avem o ordine de scrieri și citiri care respectă ordinea cronologică
 6.	B citește din nou valoarea 2: B -> r.read(): 2
 7.	C scrie 1 în r: C -> r.write(1)
 8.	A citește valoarea 1: A -> r.read(): 1
-9.	
+	
 Această ordine a operațiilor respectă proprietatea de linearizabilitate, deoarece:
 
 •	Fiecare operație de citire reflectă valoarea actuală a lui r la momentul respectiv, așa cum a fost stabilită de scrierile anterioare.
@@ -19,13 +19,13 @@ Această ordine a operațiilor respectă proprietatea de linearizabilitate, deoa
 
 Astfel, dacă secvența este linearizabilă, ea respectă automat și consistența secvențială, deoarece ambele proprietăți garantează o ordine globală a operațiilor, dar linearizabilitatea impune un criteriu mai strict ,deci putem spune ca este si consistent secventiala.
 
-Exercitiul 2.
+# Exercitiul 2.
 
 De obicei, punem lock() înainte de blocul try ca să evităm problemele care pot apărea dacă blocarea dă greș. Dacă apelăm lock() în interiorul blocului try și se întâmplă ca blocarea să dea o eroare, programul va sări direct la finally și va încerca să deblocheze (unlock()) ceva ce nu a fost blocat. Asta poate duce la erori neprevăzute.
 
 Pe de altă parte, dacă apelăm lock() înainte de try, știm sigur că blocarea a reușit. Așa, când ajungem la finally, putem să deblocăm fără griji. Practic, e o metodă mai sigură și ne asigurăm că blocarea funcționează cum trebuie fără să ne facem griji de erori accidentale.
 
-Exercitiul 3.
+# Exercitiul 3.
 
 În algoritmul Bakery, folosim comparația (label[i], i) tocmai ca să ne asigurăm că firele de execuție intră în secțiunea critică în ordinea corectă, chiar și atunci când două fire ajung aproape simultan.
 
@@ -41,7 +41,7 @@ Prin compararea ambelor – eticheta și indicele – în ordinea (label[i], i),
    
 În acest fel, algoritmul Bakery păstrează corectitudinea ordinii și evită blocajele între fire, chiar și când două fire ajung să ceară accesul în același timp.
 
-Exercitiul 5.
+# Exercitiul 5.
 
 •	În implementarea nouă, fiecare thread accesează secțiunea critică de mai multe ori consecutiv într-un singur apel de lock() (controlat de variabila BATCH_SIZE).Ajută la reducerea numărului de intrări/ieșiri în secțiunea critică, eliminând necesitatea unui acces constant la algoritmul de locking pentru fiecare incrementare individuală a contorului partajat.
 

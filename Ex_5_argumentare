@@ -1,0 +1,8 @@
+Exercitiul 5.
+•	În implementarea nouă, fiecare thread accesează secțiunea critică de mai multe ori consecutiv într-un singur apel de lock() (controlat de variabila BATCH_SIZE).
+Ajută la reducerea numărului de intrări/ieșiri în secțiunea critică, eliminând necesitatea unui acces constant la algoritmul de locking pentru fiecare incrementare individuală a contorului partajat.
+•	Am adaugat un vector de frecvență (accessFrequency) pentru a limita accesul fiecărui thread la secțiunea critică astfel încât niciun thread să nu poată accesa mai des secțiunea critică decât celelalte.
+În canAccess(i), un thread are voie să intre doar dacă numărul său de accesări este mai mic sau egal cu cele ale altor thread-uri.
+•	În implementarea clasică, lock() permite unui thread să intre în secțiunea critică dacă nu există un alt thread la același nivel de prioritizare (level) și dacă victim este setat corect.
+Am adăugat o verificare suplimentară prin canAccess(i), care ține cont de frecvența de acces, și folosește Thread.yield() pentru a permite altor thread-uri să preia procesorul dacă un thread 
+nu este încă eligibil să intre în secțiunea critică.

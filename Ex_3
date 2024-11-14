@@ -1,0 +1,12 @@
+Exercitiul 3.
+În algoritmul Bakery, folosim comparația (label[i], i) tocmai ca să ne asigurăm că firele de execuție intră în secțiunea critică în ordinea corectă, chiar și atunci când două fire ajung aproape simultan.
+1.In cazul in care am folosi doar etichetele (label[i]) , presupunem ca avem doua fire de executie T1 si T2 care ajung simultan atunci eticheta ambelor thread-uri iau aceeasi valoarea max(…) + 1 , 
+astfel avand aceeasi eticheta  si fara un alt criteriu suplimentar , nu avem o regula care sa decida care dintre ele va intra primul in sectiunea critica deci ar aparea deadlock. 
+Algoritmul Bakery trebuie să respecte ideea de „primul venit, primul servit”, iar dacă două fire au aceeași etichetă, compararea doar pe baza etichetelor nu poate decide corect.
+2.In cazul in care am decide doar pe baza indicilor (adică numărul de identificare al fiecărui fir), algoritmul ar ignora ordinea reală în care au sosit firele. De exemplu, să zicem 
+că T2 ajunge primul și cere accesul, dar T1, cu un indice mai mic, ajunge puțin mai târziu. Dacă folosim doar indicii, T1 ar intra prima în secțiunea critică doar pentru că are un 
+număr mai mic, deși T2 a ajuns primul. Acest lucru ar fi incorect, iar firul care a ajuns mai devreme ar trebui să aștepte fără motiv.
+Prin compararea ambelor – eticheta și indicele – în ordinea (label[i], i), algoritmul se asigură că:
+1.	Eticheta contează mai întâi, deci firul care așteaptă de mai mult timp intră primul.
+2.	Indicele e folosit ca indice decisiv dacă două fire au aceeași etichetă. Astfel, firul cu indicele mai mic va avea prioritate, evitând orice conflict sau blocare.
+În acest fel, algoritmul Bakery păstrează corectitudinea ordinii și evită blocajele între fire, chiar și când două fire ajung să ceară accesul în același timp.

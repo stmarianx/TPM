@@ -1,22 +1,3 @@
-1. Starvation-Free? (Pentru grupele de joi)
-
-Definitie:
-Un algoritm este starvation-free daca fiecare thread care incearca sa obtina lock-ul
- va reusi sa-l obtina intr-un timp finit.
-
-Analiza:
-
-Fiecare thread isi seteaza propriul turn la id-ul sau (turn = me).
-Apoi verifica daca used este false. Daca este false, isi revendica lock-ul setand used = true.
-In final, verifica daca turn == me. Daca turn a fost schimbat intre timp de un alt thread, acesta reia procesul.
-Problema:
-
-In acest algoritm, un thread poate fi intrerupt dupa ce seteaza turn = me, dar inainte sa seteze used = true.
-In acest timp, un alt thread poate modifica turn la propriul me si poate obtine lock-ul inainte ca primul thread sa poata avansa.
-Daca acest scenariu continua (thread-ul initial este intrerupt constant), acesta ar putea sa nu mai obtina niciodata lock-ul.
-
-Deci algoritmul nu este starvation-free
-
 2. Deadlock-Free? (Pentru grupele de vineri)
 
 Definitie:
@@ -39,14 +20,6 @@ Deci, Algoritmul este deadlock-free, deoarece, un thread va reusi sa elibereze l
 permitand altor thread-uri sa avanseze.
 
 Trace
-1. Starvation-Free (Contraexemplu):
-Fie doua thread-uri, T1 si T2:
-
-T1 seteaza turn = 1, dar este intrerupt inainte de a seta used = true.
-T2 seteaza turn = 2, verifica used == false, si isi revendica lock-ul (used = true).
-T2 elibereaza lock-ul (used = false).
-T2 seteaza din nou turn = 2 si isi revendica lock-ul, in timp ce T1 continua sa fie preemptat.
-Acest scenariu poate continua la infinit, impiedicand T1 sa obtina lock-ul.
 
 2. Deadlock-Free (Explicatie):
 Fie doua thread-uri, T1 si T2.

@@ -53,43 +53,5 @@ numarul maxim care poate obtine "white".
 
 
 Deci Cel mult n−1 thread-uri pot obtine "white" deoarece un thread a obtinut deja "red".
-
-
-Pentru grupele de joi avem acelasi fir de executie ca mai sus:
-
-Fiecare thread apelează choose() și executa urmatorii pasi:
-1. Citeste propriul ID unic me folosind ThreadId.get().
-2. Actualizeaza variabila partajata last cu valoarea me.
-3. Verifica daca getWhite este true. Daca da, returneaza "white".
-4. Set getWhite la true.
-5. Verifica daca last == me. Dacă da, returneaza "red"; altfel, returneaza "black".
-
-Primul thread care ajunge la pasul 3 și gasește getWhite = false va continua la pasul 4.
-Dupa ce seteaza getWhite = true la pasul 4, verifica la pasul 5 dacă last == me.
-Deoarece last a fost actualizat la pasul 2 cu propriul me și niciun alt thread nu a intervenit
-intre timp, conditia last == me este adevarata.
-Prin urmare, acest thread va returna "red".
-
-Alte thread-uri:
-
-Orice thread ulterior care ajunge la pasul 3 dupa ce getWhite a fost setat la true
-va gasi getWhite = true și va returna "white" imediat.
-Aceste thread-uri nu vor ajunge la pasii 4 și 5.
-
-Deci doar un singur thread poate obține "red" — primul care setează getWhite = true
-
-Cel mult n−1 thread-uri pot obtine "black":
-
-Thread-uri care pot returna "black":
-
-Thread-urile care ajung la pasul 3 și gasesc getWhite = false vor continua la pașii 4 și 5.
-Dacă intre pasii 2 și 5, un alt thread modifica last, atunci conditia last == me va fi falsa,
-iar thread-ul va returna "black".
-Cazul favorabil pentru "black":
-Dacă toate cele n−1 thread-uri (in afara de "red") ajung la pasul 3 înainte ca
-getWhite sa fie setat la true, atunci ele pot continua la pașii 4 și 5.
-Dintre acestea, cele la care last != me la pasul 5 vor returna "black".
-Astfel, cel mult n−1 thread-uri pot returna "black". Celelalte vor returna white si nu afecteaza
-
 QEd
 

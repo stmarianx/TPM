@@ -1,0 +1,55 @@
+1. Starvation-Free? (Pentru grupele de joi)
+
+Definitie:
+Un algoritm este starvation-free daca fiecare thread care incearca sa obtina lock-ul
+ va reusi sa-l obtina intr-un timp finit.
+
+Analiza:
+
+Fiecare thread isi seteaza propriul turn la id-ul sau (turn = me).
+Apoi verifica daca used este false. Daca este false, isi revendica lock-ul setand used = true.
+In final, verifica daca turn == me. Daca turn a fost schimbat intre timp de un alt thread, acesta reia procesul.
+Problema:
+
+In acest algoritm, un thread poate fi intrerupt dupa ce seteaza turn = me, dar inainte sa seteze used = true.
+In acest timp, un alt thread poate modifica turn la propriul me si poate obtine lock-ul inainte ca primul thread sa poata avansa.
+Daca acest scenariu continua (thread-ul initial este intrerupt constant), acesta ar putea sa nu mai obtina niciodata lock-ul.
+
+Deci algoritmul nu este starvation-free
+
+2. Deadlock-Free? (Pentru grupele de vineri)
+
+Definitie:
+Un algoritm este deadlock-free daca niciun set de thread-uri nu ramane blocat permanent
+ fara sa poata avansa.
+
+Analiza:
+
+Thread-ul curent poate intra intr-un ciclu de asteptare (while) doar daca turn != me sau daca used este true.
+Daca used este eliberat (used = false prin unlock), alt thread poate obtine lock-ul.
+Nu exista un mecanism care sa creeze un ciclu de asteptare interdependent intre mai multe thread-uri,
+deoarece fiecare thread doar asteapta pe used sa devina false.
+
+Lipsa unui deadlock:
+
+Deoarece niciun thread nu blocheaza permanent resursa si unlock intotdeauna reseteaza used la false, alte thread-uri pot progresa.
+Algoritmul nu creeaza blocaje reciproce, deci este deadlock-free.
+
+Deci, Algoritmul este deadlock-free, deoarece, un thread va reusi sa elibereze lock-ul,
+permitand altor thread-uri sa avanseze.
+
+Trace
+1. Starvation-Free (Contraexemplu):
+Fie doua thread-uri, T1 si T2:
+
+T1 seteaza turn = 1, dar este intrerupt inainte de a seta used = true.
+T2 seteaza turn = 2, verifica used == false, si isi revendica lock-ul (used = true).
+T2 elibereaza lock-ul (used = false).
+T2 seteaza din nou turn = 2 si isi revendica lock-ul, in timp ce T1 continua sa fie preemptat.
+Acest scenariu poate continua la infinit, impiedicand T1 sa obtina lock-ul.
+
+2. Deadlock-Free (Explicatie):
+Fie doua thread-uri, T1 si T2.
+
+Daca T1 blocheaza lock-ul (used = true), T2 va astepta pana cand used este eliberat.
+unlock asigura ca used devine false, astfel T2 poate obtine lock-ul.

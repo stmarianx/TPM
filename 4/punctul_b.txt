@@ -1,0 +1,66 @@
+1. Excluderea Mutuală? (Grupele de joi)
+Definiție:
+Excluderea mutuala garanteaza ca, la un moment dat,
+doar un singur thread poate executa sectiunea critica protejata de un lock.
+
+Analiza Algoritm:
+Comportamentul lock:
+
+x si y sunt variabile globale volatile utilizate pentru a controla accesul thread-urilor.
+Fiecare thread isi seteaza x la propriul ID (x = me) si verifica daca alt thread are deja acces (y != 0).
+Daca y este 0, thread-ul seteaza y = me si verifica daca alt thread a modificat intre timp x.
+Daca x nu mai este egal cu propriul ID, se apeleaza lock-ul incapsulat (lock.lock()),
+care asigura excluderea mutuala.
+
+Cheia problemei:
+
+In cazul in care doua thread-uri, sa zicem T1 si T2, ruleaza in paralel:
+T1 seteaza x = 1.
+T2 seteaza imediat dupa x = 2.
+Daca ambele ajung simultan la linia y = me si seteaza y = 1 respectiv y = 2,
+excluderea mutuala este compromisa, deoarece x si y sunt valori independente si
+pot fi accesate in mod concurent.
+
+Deci algoritmul nu asigura excluderea mutuala, deoarece valorile x si y pot fi modificate concurent,
+permitand teoretic accesul simultan a doua thread-uri in sectiunea critica.
+Lock-ul incapsulat este apelat doar intr-un subset de cazuri (if (x != me)),
+ceea ce nu este suficient pentru a preveni coliziuni.
+
+2. Fairness? (Grupele de vineri)
+Definitie:
+Un algoritm este considerat fair daca toate thread-urile au oportunitati egale de a accesa
+sectiunea critica. Un thread nu trebuie sa fie dezavantajat sistematic fata de altele.
+
+Analiza Algoritm:
+Mecanismul de fairness:
+
+lock incapsulat este starvation-free, deci thread-urile care apeleaza explicit lock.lock() vor accesa sectiunea critica intr-un timp finit.
+Totusi, mecanismul de control al variabilelor x si y este separat de lock-ul incapsulat.
+Daca doua thread-uri ajung simultan in regiunea while (y != 0), doar unul dintre ele va reusi sa seteze y = me si sa evite apelul lock.lock(). Acest comportament poate duce la o situatie in care un thread (T1) are acces mai frecvent, in timp ce altul (T2) este dezavantajat.
+Contraexemplu:
+
+Fie doua thread-uri T1 si T2 care incearca sa acceseze sectiunea critica:
+T1 seteaza x = 1 si y = 1 fara a apela lock.lock().
+T2 ajunge la linia if (x != me) si apeleaza lock.lock().
+Deoarece lock incapsulat este starvation-free, T2 va astepta pana cand T1 elibereaza lock-ul.
+In executii repetate, acest comportament poate favoriza T1, deoarece nu asteapta pe lock.lock().
+
+Deci algoritmul nu garanteaza fairness, deoarece variabilele x si y permit acces privilegiat pentru
+anumite thread-uri, iar mecanismul lock incapsulat nu este folosit uniform.
+
+Trace
+Pentru Excluderea Mutuala (Contraexemplu):
+Fie doua thread-uri T1 si T2 care ruleaza in paralel:
+
+T1 seteaza x = 1.
+T2 seteaza imediat x = 2.
+T1 verifica while (y != 0) si gaseste y == 0. Seteaza y = 1.
+T2 verifica while (y != 0) si gaseste y == 0. Seteaza y = 2.
+Acum, y are doua valori simultane percepute diferit de cele doua thread-uri.
+Excluderea mutuala este incalcata.
+
+Pentru Fairness (Contraexemplu):
+T1 incepe executia si seteaza x = 1, apoi y = 1.
+T2 incepe executia, seteaza x = 2 si apeleaza lock.lock() pentru ca x != 2.
+T1 continua sa execute sectiunea critica, fara sa fie blocat de lock.lock().
+In executii repetate, T1 poate continua sa aiba acces mai frecvent, iar T2 va fi dezavantajat.
